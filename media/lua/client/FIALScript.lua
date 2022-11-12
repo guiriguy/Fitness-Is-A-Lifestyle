@@ -39,6 +39,7 @@ function ISFitnessAction:update()
 	if player then	
 		
 		regNum = math.ceil(player:getFitness():getRegularity(exerciseName)*100)/100
+		print(regNum)
 
 		if not itsExercise then
 			itsExercise = true
