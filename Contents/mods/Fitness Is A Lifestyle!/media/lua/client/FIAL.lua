@@ -1,22 +1,47 @@
 require "TimedActions/ISFitnessAction"
 
+--Check Mods for compatibility
+local CompMods = {
+    ["MoreSimpleTraitsVanilla"] = "MSTVanillaFitnessAction",
+    ["MoreSimpleTraits"] = "MSTFitnessAction",
+    ["DynamicTraits"] = "DTnewMechanics",
+    ["DynamicTraits"] = "DTexpandedActionsEffects"
+}
+local ISModLoaded = {}
+local LookModName = getActivatedMods()
+for i = 1, LookModName:size() do
+    local modID = LookModName:get(i-1)
+    if CompMods[modID] and not ISModLoaded[modID] then
+        require (CompMods[modID])
+        ISModLoaded[modID] = true
+        print("FIAL: Added compatibility to: "..tostring(modID))
+    end
+end
+-- Compatibilities
+--Modification for Compatibilities
+-- DynamicTraits
+local original_DTexerciseMultiplierIfMaxRegularity
+local function new_DTexerciseMultiplierIfMaxRegularity()
+    --print("Disabled DT OG code")
+end
+if ISModLoaded["DynamicTraits"] then
+    Events.OnGameBoot.Add(function()
+        original_DTexerciseMultiplierIfMaxRegularity = exerciseMultiplierIfMaxRegularity
+        exerciseMultiplierIfMaxRegularity = new_DTexerciseMultiplierIfMaxRegularity
+        print("Supposedly added compatibility")
+    end)
+end
+
 -- Variables
 -- Game TimedActions
 local default_start = ISFitnessAction.start
 local default_exeLooped = ISFitnessAction.exeLooped
 local default_stop = ISFitnessAction.stop
 -- Strength Info
-local _PerkStrength
-local _LvlPerkStrength
-local _TypePerkStrength
 local fOfStrength --(Float) Indicates the amount of XP that Strength has received (vanilla)
 -- Fitness Info
-local _PerkFitness
-local _LvlPerkFitness
-local _TypePerkFitness
 local fOfFitness --(Float) Indicates the amount of XP that Fitness has received (vanilla)
 -- Exercise Info
-local _ExerciseName
 local isExercising
 local _getRegularityExercise
 -- Maths to Exercise
@@ -56,7 +81,7 @@ local modLvl6
 local modLvl7
 local modLvl8
 local modLvl9
---[[Posible addons
+--[[Possible addons
 local ExIsStrength --(Boolean) Indicates that the perk exercised is Strength
 local ExIsFitness --(Boolean) Indicates that the perk exercised is Fitness]]--
 -- Functions
@@ -106,23 +131,18 @@ end
 local XPGiven = function(_player, _perk, _float)
     if _player then
         if tostring(_perk) == "Strength" then
-            _PerkStrength = _perk
-            _LvlPerkStrength = _player:getPerkLevel(_perk)
-            _TypePerkStrength = _PerkStrength:getType()
             if _float >= 0 then
                 fOfStrength = _float
             end
         elseif tostring(_perk) == "Fitness" then
-            _PerkFitness = _perk
-            _LvlPerkFitness = _player:getPerkLevel(_perk)
-            _TypePerkFitness = _PerkFitness:getType()
             if _float >= 0 then
                 fOfFitness = _float
             end
         end
     end
 end
-local KeyTextTalk = function(_KeyPressed)
+
+--[[local KeyTextTalk = function(_KeyPressed)
     for playerIndex=0,getNumActivePlayers()-1 do
         local _player = getSpecificPlayer(playerIndex)
         if _player and not _player:isDead() then
@@ -133,8 +153,7 @@ local KeyTextTalk = function(_KeyPressed)
             end
         end
     end
-
-end
+end]]--
 local mathMulXP =  function(character, perkType, perkLvl, RegNum)
     local RegNumBool = 0
     local mulXP = 0
@@ -162,73 +181,44 @@ local mathMulXP =  function(character, perkType, perkLvl, RegNum)
     end
 end
 local CheckRegularity = function ()
-    for playerIndex=0,getNumActivePlayers()-1 do
-        local _player = getSpecificPlayer(playerIndex)
+    for i = 0,getNumActivePlayers()-1 do
+        local _player = getSpecificPlayer(i)
         if _player and not _player:isDead() then
             if not itsExercise then
-                if _PerkFitness and _PerkStrength and _LvlPerkFitness and _LvlPerkStrength then
-                    for k,v in pairs(FitnessExercises.exercisesType) do
-                        NumberOfExercises = NumberOfExercises + 1
-                        _sumAvgRegularity = mathsUp00((_sumAvgRegularity + _player:getFitness():getRegularity(k)))
-                    end
-                    _totalAvgRegularity = mathsUp00((_sumAvgRegularity/ NumberOfExercises))
-
-                    mathMulXP(_player, _PerkStrength, _LvlPerkStrength, _totalAvgRegularity)
-                    mathMulXP(_player, _PerkFitness, _LvlPerkFitness, _totalAvgRegularity)
-
-                    NumberOfExercises = 0
-                    _sumAvgRegularity = 0
+                for k in pairs(FitnessExercises.exercisesType) do
+                    NumberOfExercises = NumberOfExercises + 1
+                    _sumAvgRegularity = mathsUp00((_sumAvgRegularity + _player:getFitness():getRegularity(k)))
                 end
-
+                _totalAvgRegularity = mathsUp00((_sumAvgRegularity/ NumberOfExercises))
+                mathMulXP(_player, Perks.Strength, _player:getPerkLevel(Perks.Strength), _totalAvgRegularity)
+                mathMulXP(_player, Perks.Fitness, _player:getPerkLevel(Perks.Fitness), _totalAvgRegularity)
+                NumberOfExercises = 0
+                _sumAvgRegularity = 0
             end
         end
     end
 end
---[[local ModifyXP = function(_type, _xp)
-
-end]]--
---Code
---Check Mods for compatibilty
-local CompMods = {
-    ["MoreSimpleTraitsVanilla"] = "MSTVanillaFitnessAction",
-    ["MoreSimpleTraits"] = "MSTFitnessAction",
-    ["DynamicTraits"] = "DTnewMechanics",
-    ["DynamicTraits"] = "DTexpandedActionsEffects"
-}
-local ISModLoaded = {}
-local LookModName = getActivatedMods()
-for i = 1, LookModName:size() do
-    local modID = LookModName:get(i-1)
-    if CompMods[modID] and not ISModLoaded[modID] then
-        require (CompMods[modID])
-        ISModLoaded[modID] = true
-        print("FIAL: Added compatibility to: "..tostring(modID))
+local Testing = function(_player)
+    print(tostring(_player).." is moving")
+    if _player:isRunning() then
+        --[[print(_player:getSpeedMod())
+        _player:setSpeedMod(10)]]-- Does not seem possible
+        print("Player is Running")
     end
 end
-
-local original_DTexerciseMultiplierIfMaxRegularity
-local function new_DTexerciseMultiplierIfMaxRegularity()
-    --print("Disabled DT OG code")
-end
--- Compatibilities
--- DynamicTraits
-if ISModLoaded["DynamicTraits"] then
-    Events.OnGameBoot.Add(function()
-        original_DTexerciseMultiplierIfMaxRegularity = exerciseMultiplierIfMaxRegularity
-        exerciseMultiplierIfMaxRegularity = new_DTexerciseMultiplierIfMaxRegularity
-        print("Supposedly added compatibility")
-    end)
-end
+--[[local ModifyXP = function(_type, _xp)
+end]]--
+--Code
 --Start of Exercise
 function ISFitnessAction:start()
     default_start(self)
     local _player = self.character
     if _player and not _player:isDead() then
         isExercising = true
-        _ExerciseName = self.exercise
-        --print(_ExerciseName)
-        if _ExerciseName then
-            _getRegularityExercise = mathsUp00(_player:getFitness():getRegularity(_ExerciseName))
+        _getRegularityExercise = mathsUp00(_player:getFitness():getRegularity(self.exercise))
+        if _getRegularityExercise then
+            mathMulXP(_player, Perks.Strength, _player:getPerkLevel(Perks.Strength), _getRegularityExercise)
+            mathMulXP(_player, Perks.Fitness, _player:getPerkLevel(Perks.Fitness), _getRegularityExercise)
         end
     end
 end
@@ -237,67 +227,66 @@ function ISFitnessAction:exeLooped()
     default_exeLooped(self)
     local _player = self.character
     if _player and not _player:isDead() then
-        if not isExercising or not _ExerciseName then
+        if not isExercising then
             isExercising = true
-            _ExerciseName = self.exercise
-            --print(_ExerciseName)
         end
-        --[[print(FitnessExercises.exercisesType[tostring(_ExerciseName)]["xpMod"])
-        FitnessExercises.exercisesType[tostring(_ExerciseName)]["xpMod"] = 1000
-        print(FitnessExercises.exercisesType[tostring(_ExerciseName)]["xpMod"])
-        print(self.exeData["xpMod"])
-        StoreDataTest = _player:getModData().LastTimeExercise
-        if StoreDataTest then
-            _player:getModData().LastTimeExercise = StoreDataTest + 10
-            print("Added 10")
-            print(_player:getModData().LastTimeExercise)
-        else
-            print("Created LastTimeExercise")
-            _player:getModData().LastTimeExercise = 0
-        end]]--
-        --print("Looping")
-        -- Works! print(_G["modLvl"..tostring(_LvlPerkFitness)])
-        _getRegularityExercise = mathsUp00(_player:getFitness():getRegularity(_ExerciseName))
+        _getRegularityExercise = mathsUp00(_player:getFitness():getRegularity(self.exercise))
         if _getRegularityExercise then
-            mathMulXP(_player, _PerkStrength, _LvlPerkStrength, _getRegularityExercise)
-            mathMulXP(_player, _PerkFitness, _LvlPerkFitness, _getRegularityExercise)
+            mathMulXP(_player, Perks.Strength, _player:getPerkLevel(Perks.Strength), _getRegularityExercise)
+            mathMulXP(_player, Perks.Fitness, _player:getPerkLevel(Perks.Fitness), _getRegularityExercise)
         end
         if modXPEnable then
             if fOfFitness then
                 if not modXPxLevel then
-                    _player:getXp():AddXP(_TypePerkFitness, (fOfFitness * -1))
-                    _player:getXp():AddXP(_TypePerkFitness, (mathsUp00((fOfFitness * (SVLM1+((SVLM10-SVLM1)*((_LvlPerkFitness+1)/10)))))))
+                    _player:getXp():AddXP(Perks.Fitness:getType(), (fOfFitness * -1))
+                    _player:getXp():AddXP(Perks.Fitness:getType(), (mathsUp00((fOfFitness * (SVLM1+((SVLM10-SVLM1)*((_player:getPerkLevel(Perks.Fitness)+1)/10)))))))
                     if ISModLoaded["DynamicTraits"] and _player:HasTrait("Prodigy") then
-                        _player:getXp():AddXP(_TypePerkFitness, ((self.exeData.xpMod * 20) * -1))
-                        _player:getXp():AddXP(_TypePerkFitness, mathsUp00((self.exeData.xpMod * 20) * (SVLM1+((SVLM10-SVLM1)*((_LvlPerkFitness+1)/10)))))
+                        _player:getXp():AddXP(Perks.Fitness:getType(), ((self.exeData.xpMod * 20) * -1))
+                        _player:getXp():AddXP(Perks.Fitness:getType(), mathsUp00((self.exeData.xpMod * 20) * (SVLM1+((SVLM10-SVLM1)*((_player:getPerkLevel(Perks.Fitness)+1)/10)))))
                     end
                 else
-                    _player:getXp():AddXP(_TypePerkFitness, (fOfFitness * -1))
-                    _player:getXp():AddXP(_TypePerkFitness, (mathsUp00((fOfFitness * (_G["modLvl"..tostring(_LvlPerkFitness)])))))
+                    _player:getXp():AddXP(Perks.Fitness:getType(), (fOfFitness * -1))
+                    _player:getXp():AddXP(Perks.Fitness:getType(), (mathsUp00((fOfFitness * (_G["modLvl"..tostring(_player:getPerkLevel(Perks.Fitness))])))))
                     if ISModLoaded["DynamicTraits"] and _player:HasTrait("Prodigy") then
-                        _player:getXp():AddXP(_TypePerkFitness, ((self.exeData.xpMod * 20) * -1))
-                        _player:getXp():AddXP(_TypePerkFitness, mathsUp00((self.exeData.xpMod * 20) * (_G["modLvl"..tostring(_LvlPerkFitness)])))
+                        _player:getXp():AddXP(Perks.Fitness:getType(), ((self.exeData.xpMod * 20) * -1))
+                        _player:getXp():AddXP(Perks.Fitness:getType(), mathsUp00((self.exeData.xpMod * 20) * (_G["modLvl"..tostring(_player:getPerkLevel(Perks.Fitness))])))
                     end
                 end
             end
             if fOfStrength then
                 if not modXPxLevel then
-                    _player:getXp():AddXP(_TypePerkStrength, (fOfStrength * -1))
-                    _player:getXp():AddXP(_TypePerkStrength, (mathsUp00((fOfStrength * (SVLM1+((SVLM10-SVLM1)*((_LvlPerkStrength+1)/10)))))))
+                    _player:getXp():AddXP(Perks.Strength:getType(), (fOfStrength * -1))
+                    _player:getXp():AddXP(Perks.Strength:getType(), (mathsUp00((fOfStrength * (SVLM1+((SVLM10-SVLM1)*((_player:getPerkLevel(Perks.Fitness)+1)/10)))))))
                     if ISModLoaded["DynamicTraits"] and _player:HasTrait("Prodigy") then
-                        _player:getXp():AddXP(_TypePerkStrength, ((self.exeData.xpMod * 20) * -1))
-                        _player:getXp():AddXP(_TypePerkStrength, mathsUp00((self.exeData.xpMod * 20) * (SVLM1+((SVLM10-SVLM1)*((_LvlPerkStrength+1)/10)))))
+                        _player:getXp():AddXP(Perks.Strength:getType(), ((self.exeData.xpMod * 20) * -1))
+                        _player:getXp():AddXP(Perks.Strength:getType(), mathsUp00((self.exeData.xpMod * 20) * (SVLM1+((SVLM10-SVLM1)*((_player:getPerkLevel(Perks.Fitness)+1)/10)))))
                     end
                 else
-                    _player:getXp():AddXP(_TypePerkStrength, (fOfStrength * -1))
-                    _player:getXp():AddXP(_TypePerkStrength, (mathsUp00((fOfStrength * (_G["modLvl"..tostring(_LvlPerkStrength)])))))
+                    _player:getXp():AddXP(Perks.Strength:getType(), (fOfStrength * -1))
+                    _player:getXp():AddXP(Perks.Strength:getType(), (mathsUp00((fOfStrength * (_G["modLvl"..tostring(_player:getPerkLevel(Perks.Fitness))])))))
                     if ISModLoaded["DynamicTraits"] and _player:HasTrait("Prodigy") then
-                        _player:getXp():AddXP(_TypePerkStrength, ((self.exeData.xpMod * 20) * -1))
-                        _player:getXp():AddXP(_TypePerkStrength, mathsUp00((self.exeData.xpMod * 20) * (_G["modLvl"..tostring(_LvlPerkStrength)])))
+                        _player:getXp():AddXP(Perks.Strength:getType(), ((self.exeData.xpMod * 20) * -1))
+                        _player:getXp():AddXP(Perks.Strength:getType(), mathsUp00((self.exeData.xpMod * 20) * (_G["modLvl"..tostring(_player:getPerkLevel(Perks.Fitness))])))
                     end
                 end
             end
         end
+            --testing
+            --[[print(FitnessExercises.exercisesType[tostring(_ExerciseName)]["xpMod"])
+            FitnessExercises.exercisesType[tostring(_ExerciseName)]["xpMod"] = 1000
+                print(FitnessExercises.exercisesType[tostring(_ExerciseName)]["xpMod"])
+                print(self.exeData["xpMod"])
+                StoreDataTest = _player:getModData().LastTimeExercise
+                if StoreDataTest then
+                    _player:getModData().LastTimeExercise = StoreDataTest + 10
+                    print("Added 10")
+                    print(_player:getModData().LastTimeExercise)
+                else
+                    print("Created LastTimeExercise")
+                    _player:getModData().LastTimeExercise = 0
+                end]]--
+            --print("Looping")
+            -- Works! print(_G["modLvl"..tostring(_LvlPerkFitness)])
     end
 end
 --End of Exercise
@@ -305,20 +294,21 @@ function ISFitnessAction:stop()
     local _player = self.character
     if _player then
         isExercising = false
-        _ExerciseName = nil
         _getRegularityExercise = 0
         _sumAvgRegularity = 0
         _totalAvgRegularity = 0
         fOfStrength = 0
         fOfFitness = 0
+        CheckRegularity()
     end
     default_stop(self)
 end
 --Events
-Events.OnKeyPressed.Add(KeyTextTalk)
+--Events.OnKeyPressed.Add(KeyTextTalk)
 Events.AddXP.Add(XPGiven)
 Events.OnLoad.Add(Starter)
 Events.EveryTenMinutes.Add(CheckRegularity)
+Events.OnPlayerMove.Add(Testing)
 --Events.OnCharacterDeath.Add(ResetPlayer)
 
 --[[Legacy//for references
@@ -434,7 +424,7 @@ else
     print("Recalled")
 end
 
-gettin player
+getting player
 
                 for playerIndex=0,getNumActivePlayers()-1 do
                     local character = getSpecificPlayer(playerIndex)
