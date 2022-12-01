@@ -1,4 +1,4 @@
-name=Fitness Is A Lifestyle! [Test]
-id=FitnessIsALifestyle	[Test]
+name=Fitness Is A Lifestyle! [Unstable]
+id=FitnessIsALifestyle	[Unstable]
 description=This mods adds a multiplier to the Fitness and Strength perks depending on the regularity of your exercises and takes into count the average of all exercises' regularity to give you as a passive multiplier, at version 0.2.0 also adds the ability to modify the Vanilla XP gain.
 poster=poster.png
