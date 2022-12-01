@@ -1,25 +1,37 @@
 version=1
 id=2888382453
 title=Fitness is a Lifestyle [DEV][41.78]
-description=Stable branch: [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2704980483]Fitness Is A Lifestyle![/url]
-description=
-description=This is the Dev branch of the original mod: Fitness is a Lifestyle!
-description=
-description=New features added:
-description=
-description=Ability to modify in a simple 2 way the min and max multiplier at level 1 and 10.
-description=Ability to modify each level's multiplier
-description=Modify the vanilla XP gain per level at a simple and complex way (to choose)
-description=Changes:
-description=
-description=Hardcore is now called Realistic Growth
-description=Adapted to the simple level multiplier
-description=Greatly reduced performance hit (was already really low, but yeah)
-description=Cleaned code
-description=
-description=Not compatible with the currently broken
-description=The Workshop, Scrap Armour, Scrap...
-description=
-description=[url=https://github.com/guiriguy/Fitness-Is-A-Lifestyle/tree/unstable]GitHub[/url]
+description=Stable branch: [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2704980483]Fitness Is A Lifestyle![/url]
+description=
+description=[quote]Now compatible with [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2792245343&searchtext=mst]More Simple Traits (MST)[/url][/quote]
+description=
+description=[H3]EVERYTHING HAS A OPTION[/H3]
+description=
+description=This is the Dev branch of the original mod: Fitness is a Lifestyle!
+description=
+description=New features added:
+description=
+description=Ability to modify in a simple 2 way the min and max multiplier at level 1 and 10.
+description=Ability to modify each level's multiplier
+description=Modify the vanilla XP gain per level at a simple and complex way (to choose)
+description=
+description=Changes:
+description=
+description=Hardcore is now called Realistic Growth
+description=Adapted to the simple level multiplier
+description=Greatly reduced performance hit (was already really low, but yeah)
+description=Cleaned code
+description=
+description=[quote][b]?Permissions?[/b]
+description=
+description=? You are allowed, of course, to add this mod to a Steam Collection.
+description=? You are allowed to add this mod to a Mod Collection, with credit and a direct link of this mod in the description
+description=? You are not allowed to upload variants of this mod, neither copy it, without permission of the owner/s. Not in the Steam Workshop nor any other mod websites.
+description=? If broken by any case because of updates, please contact the owner/s to get the permission to fix and upload it.[/quote]
+description=
+description=Other mods I've done:
+description=[url=https://steamcommunity.com/sharedfiles/filedetails/?id=2893136035][img]https://i.imgur.com/08fdw8T.png[/img][/url][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2891170430][img]https://imgur.com/TXzSsOw.png[/img][/url]
+description=
+description=[url=https://github.com/guiriguy/Fitness-Is-A-Lifestyle/tree/unstable][img]https://i.imgur.com/GtyP2C0.png[/img][/url]
 tags=Build 41;Balance;Hardmode;Multiplayer
 visibility=public
