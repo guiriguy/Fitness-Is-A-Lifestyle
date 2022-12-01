@@ -1,11 +1,14 @@
 Unstable changes:
-V0.2.6:
-    - Fixed the calling of player to work in MP
+V0.2.7:
+    - Add Dynamic Traits to "compatibility"
+    - Redone the amounts of XP given as there were errors.
+    - Check to modify the MST addon when Prodigy from Dynamic traits is added, now it will also apply to Prodigy players
+    - Check the CheckRegNum to not get active while you are doing exercise. Should not do it anymore.
+    - Changed the way the XP was being subtracted to modify the base XP gains.
+    - Optimized code.
+    - Should work, and modify, any XP from Strength and Fitness given to give the modified value based on the XP base multipliers, if the option is activated.
 
 TODO:
-    - Check the CheckRegNum to not get active while you are doing exercise. (Not working as intended)
-    - Check to modify the MST addon when Prodigy from Dynamic traits is added
-    - Add Dynamic Traits to "compatibility"
     - Add Realistic Growth to the XP base gain
 
 Possible features:
