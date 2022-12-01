@@ -1,25 +1,6 @@
 version=1
-id=2888382453
-title=Fitness is a Lifestyle [DEV][41.78]
-description=Stable branch: [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2704980483]Fitness Is A Lifestyle![/url]
+id=
+title=Tester
 description=
-description=This is the Dev branch of the original mod: Fitness is a Lifestyle!
-description=
-description=New features added:
-description=
-description=Ability to modify in a simple 2 way the min and max multiplier at level 1 and 10.
-description=Ability to modify each level's multiplier
-description=Modify the vanilla XP gain per level at a simple and complex way (to choose)
-description=Changes:
-description=
-description=Hardcore is now called Realistic Growth
-description=Adapted to the simple level multiplier
-description=Greatly reduced performance hit (was already really low, but yeah)
-description=Cleaned code
-description=
-description=Not compatible with the currently broken
-description=The Workshop, Scrap Armour, Scrap...
-description=
-description=[url=https://github.com/guiriguy/Fitness-Is-A-Lifestyle/tree/unstable]GitHub[/url]
-tags=Build 41;Balance;Hardmode;Multiplayer
-visibility=public
+tags=
+visibility=
