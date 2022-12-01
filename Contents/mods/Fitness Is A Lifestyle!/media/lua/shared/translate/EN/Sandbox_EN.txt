@@ -5,19 +5,19 @@ Sandbox_EN = {
 	Sandbox_FitnessIsALifestyle_Hardcore = "Enable Realistic Growth",
 	Sandbox_FitnessIsALifestyle_Hardcore_tooltip = "If ticked, the XP multiplier will grow exponentially, based on the regularity of the exercise.",
 
-	Sandbox_FitnessIsALifestyle_SLM1 = "SLM Level 1",
+	Sandbox_FitnessIsALifestyle_SLM1 = "Multiplier at Level 1",
 	Sandbox_FitnessIsALifestyle_SLM1_tooltip = "This will determine the multiplier at level 1"
 
-	Sandbox_FitnessIsALifestyle_SLM10 = "SLM Level 10",
+	Sandbox_FitnessIsALifestyle_SLM10 = "Multiplier at Level 10",
 	Sandbox_FitnessIsALifestyle_SLM10_tooltip = "This will determine the multiplier at level 10"
 
     Sandbox_FitnessIsALifestyle_VanillaMod = "Enable Vanilla XP Gain Modification"
     Sandbox_FitnessIsALifestyle_VanillaMod_tooltip = "This will balance the base XP gain based on the level of either Fitness or Strength."
 
-    Sandbox_FitnessIsALifestyle_SVLM1 = "SLM Level 1",
+    Sandbox_FitnessIsALifestyle_SVLM1 = "Modifier at Level 1",
     Sandbox_FitnessIsALifestyle_SVLM1_tooltip = "This will determine the modifier at level 1"
 
-    Sandbox_FitnessIsALifestyle_SVLM10 = "SLM Level 10",
+    Sandbox_FitnessIsALifestyle_SVLM10 = "Modifier at Level 10",
     Sandbox_FitnessIsALifestyle_SVLM10_tooltip = "This will determine the modifier at level 10"
 
 	Sandbox_FitnessIsALifestyleXLvl = "Fitness Is A Lifestyle! XP Per Level",
